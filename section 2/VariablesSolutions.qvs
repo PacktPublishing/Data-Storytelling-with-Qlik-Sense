@@ -1,0 +1,31 @@
+/* ===============
+No Optional Parameter
+==================*/
+
+// Slice & Stitch method
+Let eQuarterlySales2 = 'Sum({$ <q_start = {"$'&'(=Floor(QuarterStart(Max([Date]),$1)))"}>}Sales)';
+
+// Replace $ method
+Set eQuarterlySales2Str = Sum({$ <q_start = {"@(=Floor(QuarterStart(Max([Date]),$1)))"}>}Sales);
+Let eQuarterlySales2 = Replace('$(eQuarterlySales2Str)','@','$');
+Set eQuarterlySales2Str=;  // Cleaning
+
+
+/* ===============
+With Optional Parameter
+==================*/
+
+// Slice & Stitch method
+Let eQuarterlySales2 = 'If($0=0,
+Sum({$ <q_start = {"$'&'(=Floor(QuarterStart(Max([Date]))))"}>}Sales),
+Sum({$ <q_start = {"$'&'(=Floor(QuarterStart(Max([Date]),$1)))"}>}Sales)
+)';
+
+// Replace $ method
+Set eQuarterlySales2Str = If($0=0,
+Sum({$ <q_start = {"@(=Floor(QuarterStart(Max([Date]))))"}>}Sales),
+Sum({$ <q_start = {"@(=Floor(QuarterStart(Max([Date]),$1)))"}>}Sales)
+);
+
+Let eQuarterlySales2 = Replace('$(eQuarterlySales2Str)','@','$');
+Set eQuarterlySales2Str=;  // Cleaning

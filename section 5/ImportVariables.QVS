@@ -1,0 +1,52 @@
+SUB ImportVariables(vDPDLOC)
+/*===========================================================================
+File Name: ImportVariables.QVS
+SUB Name: ImportVariable
+Parameter: vDPDLOC = Data connection to DPD
+Description: Import variables as specified in DPD.  Note if you intend to load
+    variable from a QVS that defines the variables, you must include the QVS 
+    BEFORE running this sub.
+Author: Michael Smith
+Last Updated: 4/30/2019 (adding statements to unload variables, Hajme Uchiyama)
+===========================================================================*/
+Variables:
+// Get variable loading information from DPD ("App Variables" worksheet)
+LOAD
+    "Variable Name",
+    "Variable Description",
+    IsLoaded,
+    "Definition Source",
+    Definition
+From '$(vDPDLOC)'
+(ooxml, embedded labels, table is [App Variables]);
+
+For vI = 0 to NoOfRows('Variables') - 1
+
+	Let vName = Peek('Variable Name',vI,'Variables');
+	Let vIsLoaded = Peek('IsLoaded',vI,'Variables');
+    
+    If WildMatch(upper(vIsLoaded),'Y*') Then // load variable = Yes
+    	Let vSource = Peek('Definition Source',vI,'Variables');
+    	If vSource ='DPD' Then
+   			Let $(vName) = Peek('Definition',vI,'Variables'); // Load from DPD
+		ElseIf vSource = 'QVS' Then
+       		Call $(vName); // Load from QVS
+        Else
+        	Set $(vName)=;  // Unload variable for invalid definition source
+       	End If
+    Else
+		Set $(vName)=;  // Unload variable
+   	End If
+    
+Next vI
+
+Drop Table Variables;
+
+// Clearning variables
+Set vIsLoaded=;
+Set vSource=;
+Set vName=;
+Set vI=;
+Set vDPDLOC=;
+
+END SUB

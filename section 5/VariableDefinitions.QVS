@@ -1,0 +1,19 @@
+SUB vTest1
+Set vTest1 = QVS_Var_1;
+END SUB
+
+SUB vTest2
+Set vTest2 = QVS_Var_2;
+END SUB
+
+SUB vTest3
+Set vTest3 = QVS_Var_3;
+END SUB
+
+SUB vTest4
+Set vTest4 = QVS_Var_4;
+END SUB
+
+SUB vTest5
+Set vTest5 = QVS_Var_5;
+END SUB
